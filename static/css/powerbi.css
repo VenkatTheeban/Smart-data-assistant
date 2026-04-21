@@ -1,0 +1,250 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+}
+
+body {
+    background-color: #d9d9d9;
+    color: #333;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dashboard-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+}
+
+.card {
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.top-section {
+    display: flex;
+    height: 250px;
+    gap: 10px;
+}
+
+.kpi-box {
+    flex: 0 0 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-left: 5px solid #a2b4cd;
+}
+
+.kpi-value {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.kpi-label {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.slicers-box {
+    flex: 1.5;
+    background: transparent;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.slicer-row {
+    display: flex;
+    gap: 10px;
+}
+
+.border-grey {
+    border: 1px solid #d0d0d0;
+    background: #fff;
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.border-grey label {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 2px;
+}
+
+.border-grey select {
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    width: 100%;
+    color: #333;
+    font-family: inherit;
+    max-height: 40px;
+}
+
+.bot-slicer-row {
+    border: 1px solid #d0d0d0;
+    background: #fff;
+    padding: 5px 10px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.bot-slicer-row label {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.custom-buttons {
+    display: flex;
+    gap: 0;
+    height: 100%;
+}
+
+.custom-btn {
+    flex: 1;
+    border: 1px solid #e0e0e0;
+    border-right: none;
+    background: #fff;
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.custom-btn:last-child {
+    border-right: 1px solid #e0e0e0;
+}
+
+.custom-btn:hover {
+    background: #f5f5f5;
+}
+
+.tables-box {
+    display: flex;
+    flex: 1.2;
+    gap: 8px;
+}
+
+.table-container {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 0.8rem;
+    border: 1px solid #c8c8c8;
+    display: flex;
+    flex-direction: column;
+}
+
+.rightmost {
+    position: relative;
+    padding-top: 30px;
+}
+
+.clear-slicers {
+    position: absolute;
+    top: 3px;
+    right: 5px;
+}
+
+.clear-slicers button {
+    background: #fff;
+    border: 1px solid #a0a0a0;
+    padding: 3px 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: #333;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.clear-slicers button:hover {
+    background: #f0f0f0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    white-space: nowrap;
+}
+
+th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+    border-bottom: 2px solid #ccc;
+}
+
+.right-align {
+    text-align: right;
+}
+
+tfoot th {
+    background: #e8e8e8;
+    border-bottom: none;
+    border-top: 2px solid #ccc;
+}
+
+.chart-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #c9c9c9;
+}
+
+.chart-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.canvas-container {
+    flex-grow: 1;
+    position: relative;
+}
+
+@media (max-width: 1024px) {
+    body {
+        height: auto;
+        min-height: 100vh;
+        overflow: auto;
+    }
+
+    .top-section {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .kpi-box {
+        flex: none;
+        min-height: 150px;
+    }
+
+    .tables-box {
+        min-height: 260px;
+    }
+
+    .chart-section {
+        min-height: 360px;
+    }
+}

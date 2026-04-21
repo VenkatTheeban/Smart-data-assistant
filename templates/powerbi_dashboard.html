@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power BI Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/powerbi.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="top-section">
+            <div class="kpi-box card">
+                <div class="kpi-value" id="kpi-value">--</div>
+                <div class="kpi-label">No of Activation</div>
+            </div>
+
+            <div class="slicers-box card">
+                <div class="slicer-row top-slicer-row">
+                    <div class="slicer border-grey">
+                        <label>Year</label>
+                        <select id="year-slicer"><option>All</option></select>
+                    </div>
+                    <div class="slicer border-grey">
+                        <label>Month Name</label>
+                        <select id="month-slicer"><option>Multiple selections</option></select>
+                    </div>
+                </div>
+                <div class="slicer-row bot-slicer-row">
+                    <label>Custom</label>
+                    <div class="custom-buttons">
+                        <button class="custom-btn">Combo</button>
+                        <button class="custom-btn">DG</button>
+                        <button class="custom-btn">LG</button>
+                        <button class="custom-btn">Other Model</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tables-box">
+                <div class="table-container card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type of Activation</th>
+                                <th class="right-align">Device Count</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activation-tbody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Total</th>
+                                <th class="right-align" id="activation-total">--</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="table-container card rightmost">
+                    <div class="clear-slicers">
+                        <button>Clear all slicers</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Month Name</th>
+                                <th class="right-align">Total Activation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="monthly-tbody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Total</th>
+                                <th class="right-align" id="monthly-total">--</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-section card">
+            <div class="chart-title">No of Activation and Total Activation by Activation Count and Month Name</div>
+            <div class="canvas-container">
+                <canvas id="mainChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/powerbi.js') }}"></script>
+</body>
+</html>
