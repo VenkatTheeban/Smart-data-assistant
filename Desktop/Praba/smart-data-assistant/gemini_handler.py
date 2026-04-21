@@ -26,10 +26,7 @@ def _get_client():
     global _client
     if _client is None:
         if not GEMINI_API_KEY:
-            raise RuntimeError(
-                "GEMINI_API_KEY is not set. "
-                "Set GEMINI_API_KEY as an environment variable."
-            )
+            raise RuntimeError("GEMINI_API_KEY is not set.")
         import google.generativeai as genai
         genai.configure(api_key=GEMINI_API_KEY)
         _client = genai.GenerativeModel("gemini-1.5-flash")
@@ -112,11 +109,11 @@ RESPOND ONLY WITH THE JSON. No markdown, no code fences, no extra text."""
 
 
 def _call_gemini_with_retry(client, system_prompt: str, user_question: str) -> str:
+    import google.generativeai as genai
     last_error = None
 
     for attempt in range(MAX_RETRIES):
         try:
-            import google.generativeai as genai
             response = client.generate_content(
                 f"{system_prompt}\n\nUser question: {user_question}",
                 generation_config=genai.types.GenerationConfig(
@@ -230,10 +227,6 @@ def _execute_ai_output(raw: str, provider: str, fallback_note: str = "") -> dict
 
 
 def ask_gemini(user_question: str) -> dict:
-    """
-    Primary path: Gemini
-    Fallback path: Groq (if Gemini fails or returns invalid JSON)
-    """
     system_prompt = _build_system_prompt()
 
     gemini_error = None
@@ -251,7 +244,7 @@ def ask_gemini(user_question: str) -> dict:
             return _execute_ai_output(
                 raw,
                 provider="groq",
-                fallback_note="Gemini is currently unavailable. Answer generated via Groq fallback.",
+                fallback_note="Gemini unavailable. Answer generated via Groq fallback.",
             )
         except Exception as groq_error:
             return {
@@ -261,7 +254,7 @@ def ask_gemini(user_question: str) -> dict:
 
     return {
         "success": False,
-        "error": f"Gemini failed: {gemini_error}. Groq fallback not configured. Set GROQ_API_KEY.",
+        "error": f"Gemini failed: {gemini_error}. Groq fallback not configured.",
     }
 
 
@@ -278,19 +271,13 @@ def format_response_as_text(result: dict) -> str:
 
     lines = [f"{explanation}", f"Found {row_count} result(s):", ""]
 
-    if row_count <= 30:
-        if data:
-            headers = list(data[0].keys())
-            lines.append(" | ".join(headers))
-            lines.append("-" * len(" | ".join(headers)))
-            for row in data:
-                lines.append(" | ".join(str(row.get(h, "")) for h in headers))
-    else:
-        headers = list(data[0].keys())
-        lines.append(" | ".join(headers))
-        lines.append("-" * len(" | ".join(headers)))
-        for row in data[:20]:
-            lines.append(" | ".join(str(row.get(h, "")) for h in headers))
+    headers = list(data[0].keys())
+    lines.append(" | ".join(headers))
+    lines.append("-" * len(" | ".join(headers)))
+    for row in data[:20]:
+        lines.append(" | ".join(str(row.get(h, "")) for h in headers))
+
+    if row_count > 20:
         lines.append(f"\n... and {row_count - 20} more rows.")
         lines.append("Ask me to download/export this data for the full dataset.")
 
