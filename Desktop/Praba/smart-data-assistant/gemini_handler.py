@@ -12,7 +12,7 @@ import time
 import urllib.error
 import urllib.request
 
-import google.generativeai as genai
+from google import genai
 
 from config import GEMINI_API_KEY, GROQ_API_KEY, GROQ_MODEL
 from database import get_table_info, get_sample_data, run_query
