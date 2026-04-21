@@ -1,5 +1,5 @@
-# After Railway deploys, update <RAILWAY_URL> below with your actual Railway backend URL
-# Example: https://smart-data-assistant.railway.app
+[build]
+  publish = "."
 
 [[redirects]]
   from = "/api/*"
@@ -9,5 +9,5 @@
 
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/templates/index.html"
   status = 200
