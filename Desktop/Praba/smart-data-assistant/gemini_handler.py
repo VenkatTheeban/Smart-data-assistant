@@ -12,7 +12,7 @@ import time
 import urllib.error
 import urllib.request
 
-from google import genai
+import google.generativeai as genai
 
 from config import GEMINI_API_KEY, GROQ_API_KEY, GROQ_MODEL
 from database import get_table_info, get_sample_data, run_query
@@ -32,7 +32,8 @@ def _get_client():
                 "GEMINI_API_KEY is not set. "
                 "Set GEMINI_API_KEY as an environment variable."
             )
-        _client = genai.Client(api_key=GEMINI_API_KEY)
+        genai.configure(api_key=GEMINI_API_KEY)
+        _client = genai.GenerativeModel("gemini-1.5-flash")
     return _client
 
 
@@ -116,13 +117,12 @@ def _call_gemini_with_retry(client, system_prompt: str, user_question: str) -> s
 
     for attempt in range(MAX_RETRIES):
         try:
-            response = client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=f"{system_prompt}\n\nUser question: {user_question}",
-                config={
-                    "temperature": 0.1,
-                    "max_output_tokens": 2048,
-                },
+            response = client.generate_content(
+                f"{system_prompt}\n\nUser question: {user_question}",
+                generation_config=genai.types.GenerationConfig(
+                    temperature=0.1,
+                    max_output_tokens=2048,
+                ),
             )
             return (response.text or "").strip()
         except Exception as e:
