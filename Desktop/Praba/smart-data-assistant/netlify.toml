@@ -1,5 +1,5 @@
 [build]
-  publish = "."
+  publish = "public"
 
 [[redirects]]
   from = "/api/*"
@@ -9,5 +9,5 @@
 
 [[redirects]]
   from = "/*"
-  to = "/templates/index.html"
+  to = "/index.html"
   status = 200
