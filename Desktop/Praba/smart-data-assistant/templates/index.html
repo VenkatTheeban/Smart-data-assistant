@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Data Assistant | Telecom Analytics</title>
+    <meta name="description" content="AI-powered telecom activation data analytics platform">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="page-shell"></div>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon"><i class="bi bi-bar-chart-line-fill"></i></div>
+                <div class="brand-text">
+                    <span class="brand-name">SmartData Assistant</span>
+                    <span class="brand-sub">Telecom Intelligence Workspace</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="section-label">Key Metrics</div>
+                <div class="metrics-grid">
+                    <div class="metric-card primary">
+                        <div class="metric-icon"><i class="bi bi-database-fill"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-value" id="totalRecords">--</span>
+                            <span class="metric-label">Total Records</span>
+                        </div>
+                    </div>
+                    <div class="metric-card accent-red">
+                        <div class="metric-dot"></div>
+                        <div class="metric-data">
+                            <span class="metric-value" id="comboCount">--</span>
+                            <span class="metric-label">COMBO</span>
+                        </div>
+                    </div>
+                    <div class="metric-card accent-cyan">
+                        <div class="metric-dot"></div>
+                        <div class="metric-data">
+                            <span class="metric-value" id="lgCount">--</span>
+                            <span class="metric-label">LG</span>
+                        </div>
+                    </div>
+                    <div class="metric-card accent-amber">
+                        <div class="metric-dot"></div>
+                        <div class="metric-data">
+                            <span class="metric-value" id="dgCount">--</span>
+                            <span class="metric-label">DG</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="section-label">Quick Actions</div>
+                <div class="quick-list">
+                    <button class="quick-item" data-query="Show me this month's report">
+                        <i class="bi bi-calendar3"></i>
+                        <span>Monthly Report</span>
+                    </button>
+                    <button class="quick-item" data-query="Show COMBO reactivation trend by month">
+                        <i class="bi bi-graph-up-arrow"></i>
+                        <span>COMBO Trend</span>
+                    </button>
+                    <button class="quick-item" data-query="Show COMBO activation split">
+                        <i class="bi bi-pie-chart-fill"></i>
+                        <span>COMBO Type Split</span>
+                    </button>
+                    <button class="quick-item" data-query="Show total activations by custom type and activation type">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                        <span>Activation Breakdown</span>
+                    </button>
+                    <button class="quick-item" data-query="Show top 10 areas by total activations">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span>Top Areas</span>
+                    </button>
+                </div>
+
+                <div class="quick-link-wrap">
+                    <a href="https://venkattheeban.netlify.app/" target="_blank" rel="noopener noreferrer" class="full-pbi-btn">
+                        <i class="bi bi-easel2-fill"></i>
+                        <span>Open Power BI Dashboard</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-section sidebar-footer">
+               
+                <div id="watcherEvents" class="watcher-feed"></div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="top-bar-title">
+                    <h1>Data Assistant</h1>
+                    <span class="top-bar-badge"><i class="bi bi-stars"></i> AI Powered</span>
+                </div>
+                <div class="top-bar-actions">
+                    <button class="action-btn" id="refreshDataBtn" title="Re-process all data">
+                        <i class="bi bi-arrow-clockwise"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="chat-area" id="messagesContainer">
+                <div class="welcome-hero">
+                    <div class="welcome-glow"></div>
+                    <div class="welcome-content">
+                        <div class="welcome-badge"><i class="bi bi-cpu-fill"></i> Executive Insights Workspace</div>
+                        <h2>Operational Analytics, Simplified</h2>
+                        <p>Query activation performance in plain English and convert results into decision-ready reports.</p>
+                        <div class="suggestion-chips">
+                            <button class="chip" data-query="I want April month report">April month report</button>
+                            <button class="chip" data-query="Show me COMBO details">COMBO details</button>
+                            <button class="chip" data-query="Show COMBO activation split">COMBO type split</button>
+                            <button class="chip" data-query="What is the reactivation trend?">Reactivation trend</button>
+                            <button class="chip" data-query="Compare LG vs DG activations by month">LG vs DG comparison</button>
+                            <button class="chip" data-query="Which area has most new installations?">Top areas</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-bar">
+                <div class="input-container">
+                    <div class="input-field-wrap">
+                        <i class="bi bi-chat-dots"></i>
+                        <textarea id="userInput" placeholder="Ask a question about your data..." rows="1" maxlength="500"></textarea>
+                    </div>
+                    <button class="send-button" id="sendBtn" aria-label="Send">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                </div>
+                <div class="input-footer">Press <kbd>Enter</kbd> to send and <kbd>Shift+Enter</kbd> for new line</div>
+            </div>
+        </main>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
