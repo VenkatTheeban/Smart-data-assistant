@@ -157,7 +157,12 @@
 
     <script src="/static/js/app.js"></script>
     <script>
+    // Wake up Render on page load
+    fetch('/api/stats').catch(() => {});
+
     document.getElementById('uploadInput').addEventListener('change', async function() {
+        // Wake Render first, then upload
+        await fetch('/api/stats').catch(() => {});
         const file = this.files[0];
         if (!file) return;
         const formData = new FormData();
