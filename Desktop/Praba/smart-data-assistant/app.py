@@ -345,6 +345,20 @@ def chat():
     return jsonify(response)
 
 
+@app.route('/api/upload-db', methods=['POST'])
+def upload_db():
+    """Upload a SQLite database file directly."""
+    if 'file' not in request.files:
+        return jsonify({"success": False, "error": "No file provided."})
+    file = request.files['file']
+    if not file.filename.endswith('.db'):
+        return jsonify({"success": False, "error": "Only .db files are supported."})
+    from config import DATABASE_PATH
+    os.makedirs(os.path.dirname(DATABASE_PATH), exist_ok=True)
+    file.save(DATABASE_PATH)
+    return jsonify({"success": True, "message": "Database uploaded successfully."})
+
+
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
     """Upload an Excel file and import it into the database."""

@@ -114,7 +114,7 @@
                     <label class="action-btn" title="Upload Excel file" style="cursor:pointer;">
                         <i class="bi bi-upload"></i>
                         <span>Upload Data</span>
-                        <input type="file" id="uploadInput" accept=".xlsx" style="display:none;">
+                        <input type="file" id="uploadInput" accept=".xlsx,.db" style="display:none;">
                     </label>
                 </div>
             </header>
@@ -157,23 +157,23 @@
 
     <script src="/static/js/app.js"></script>
     <script>
-    // Wake up Render on page load
     fetch('/api/stats').catch(() => {});
 
     document.getElementById('uploadInput').addEventListener('change', async function() {
-        // Wake Render first, then upload
-        await fetch('/api/stats').catch(() => {});
         const file = this.files[0];
         if (!file) return;
+        const endpoint = file.name.endsWith('.db') ? '/api/upload-db' : '/api/upload';
         const formData = new FormData();
         formData.append('file', file);
         const btn = this.closest('label');
-        btn.innerHTML = '<i class="bi bi-hourglass-split"></i><span>Uploading...</span><input type="file" id="uploadInput" accept=".xlsx" style="display:none;">';
+        btn.innerHTML = '<i class="bi bi-hourglass-split"></i><span>Uploading...</span><input type="file" id="uploadInput" accept=".xlsx,.db" style="display:none;">';
         try {
-            const res = await fetch('/api/upload', {method: 'POST', body: formData});
-            const data = await res.json();
-            alert(data.status === 'success' ? `✅ Imported ${data.row_count} rows! Refresh the page.` : `❌ ${data.message}`);
-            if (data.status === 'success') location.reload();
+            const res = await fetch(endpoint, {method: 'POST', body: formData});
+            const text = await res.text();
+            const data = JSON.parse(text);
+            const ok = data.success || data.status === 'success';
+            alert(ok ? `✅ Done! Reloading...` : `❌ ${data.message || data.error}`);
+            if (ok) location.reload();
         } catch(e) {
             alert('Upload failed: ' + e.message);
         }
