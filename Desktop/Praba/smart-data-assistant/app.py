@@ -345,6 +345,31 @@ def chat():
     return jsonify(response)
 
 
+@app.route('/api/upload', methods=['POST'])
+def upload_file():
+    """Upload an Excel file and import it into the database."""
+    if 'file' not in request.files:
+        return jsonify({"success": False, "error": "No file provided."})
+    file = request.files['file']
+    if not file.filename.endswith('.xlsx'):
+        return jsonify({"success": False, "error": "Only .xlsx files are supported."})
+    import tempfile
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
+        file.save(tmp.name)
+        tmp_path = tmp.name
+    filename = file.filename.lower()
+    if 'dump' in filename or 'service' in filename:
+        from database import import_service_dump
+        result = import_service_dump(tmp_path)
+    else:
+        from database import import_raw_edw
+        result = import_raw_edw(tmp_path)
+    os.unlink(tmp_path)
+    if result.get('status') == 'success':
+        process_all()
+    return jsonify(result)
+
+
 @app.route('/api/stats')
 def stats():
     """Return summary stats for the sidebar."""
