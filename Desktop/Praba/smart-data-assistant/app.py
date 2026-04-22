@@ -27,6 +27,12 @@ from report_generator import generate_monthly_report, generate_custom_report
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
+# Initialize DB and folders when gunicorn imports this module
+import os as _os
+from database import init_db as _init_db
+_init_db()
+_os.makedirs(EXPORTS_FOLDER, exist_ok=True)
+
 # ──────────────────────────────────────────────
 # Routes
 # ──────────────────────────────────────────────
