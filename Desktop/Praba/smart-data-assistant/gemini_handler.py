@@ -155,6 +155,7 @@ def _call_groq(system_prompt: str, user_question: str) -> str:
         headers={
             "Authorization": f"Bearer {GROQ_API_KEY}",
             "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (compatible; SmartDataAssistant/1.0)",
         },
         method="POST",
     )
@@ -229,33 +230,24 @@ def _execute_ai_output(raw: str, provider: str, fallback_note: str = "") -> dict
 def ask_gemini(user_question: str) -> dict:
     system_prompt = _build_system_prompt()
 
-    gemini_error = None
+    # Primary: Groq
+    if GROQ_API_KEY:
+        try:
+            raw = _call_groq(system_prompt, user_question)
+            return _execute_ai_output(raw, provider="groq")
+        except Exception as groq_error:
+            print(f"[AI] Groq failed, trying Gemini fallback. Reason: {groq_error}")
+
+    # Fallback: Gemini
     try:
         client = _get_client()
         raw = _call_gemini_with_retry(client, system_prompt, user_question)
         return _execute_ai_output(raw, provider="gemini")
-    except Exception as e:
-        gemini_error = str(e)
-        print(f"[AI] Gemini failed, trying Groq fallback. Reason: {gemini_error}")
-
-    if GROQ_API_KEY:
-        try:
-            raw = _call_groq(system_prompt, user_question)
-            return _execute_ai_output(
-                raw,
-                provider="groq",
-                fallback_note="Gemini unavailable. Answer generated via Groq fallback.",
-            )
-        except Exception as groq_error:
-            return {
-                "success": False,
-                "error": f"Gemini failed: {gemini_error}. Groq fallback failed: {groq_error}",
-            }
-
-    return {
-        "success": False,
-        "error": f"Gemini failed: {gemini_error}. Groq fallback not configured.",
-    }
+    except Exception as gemini_error:
+        return {
+            "success": False,
+            "error": f"Groq and Gemini both failed. Groq: {groq_error if GROQ_API_KEY else 'not configured'}. Gemini: {gemini_error}",
+        }
 
 
 def format_response_as_text(result: dict) -> str:
