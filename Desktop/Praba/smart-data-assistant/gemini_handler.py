@@ -29,7 +29,7 @@ def _get_client():
             raise RuntimeError("GEMINI_API_KEY is not set.")
         import google.generativeai as genai
         genai.configure(api_key=GEMINI_API_KEY)
-        _client = genai.GenerativeModel("gemini-1.5-flash-latest")
+        _client = genai.GenerativeModel("gemini-2.0-flash")
     return _client
 
 
